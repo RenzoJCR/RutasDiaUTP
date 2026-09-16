@@ -1,0 +1,24 @@
+CREATE TABLE users (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+
+    first_names VARCHAR(100) NOT NULL,
+    last_names VARCHAR(100) NOT NULL,
+
+    email VARCHAR(150) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+
+    role VARCHAR(30) NOT NULL,
+
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
+        ON UPDATE CURRENT_TIMESTAMP(6),
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT uk_users_email UNIQUE (email),
+
+    CONSTRAINT chk_users_role
+        CHECK (role IN ('ADMINISTRADOR', 'MENTOR'))
+);
