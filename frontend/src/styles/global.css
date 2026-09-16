@@ -1,0 +1,82 @@
+:root {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: #202124;
+  background-color: #f5f6f8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f5f6f8;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.app-brand {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #202124;
+}
+
+.content-card {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.status-badge-success {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+.status-badge-warning {
+  background-color: #fff8e1;
+  color: #8a6100;
+}
+
+.status-badge-danger {
+  background-color: #fdecec;
+  color: #a61b1b;
+}
+
+.status-badge-info {
+  background-color: #e8f1fb;
+  color: #245a8d;
+}
+
+.status-badge-neutral {
+  background-color: #eeeeee;
+  color: #555555;
+}
