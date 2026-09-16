@@ -10,22 +10,34 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http
+    ) throws Exception {
 
         http
+
+                .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
 
-                        // Estado básico del backend.
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/actuator/health"
+                        ).permitAll()
 
-                        // Handshake WebSocket.
-                        .requestMatchers("/ws", "/ws/**").permitAll()
+                        .requestMatchers(
+                                "/ws",
+                                "/ws/**"
+                        ).permitAll()
 
-                        // El resto seguirá protegido por ahora.
+                        .requestMatchers(
+                                "/api/auth/register"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
                 .formLogin(Customizer.withDefaults())
+
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
