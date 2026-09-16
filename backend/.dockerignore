@@ -1,0 +1,14 @@
+target/
+
+.idea/
+*.iml
+
+.env
+
+src/main/resources/application-local.properties
+
+.git/
+.gitignore
+
+Dockerfile
+README.md
