@@ -57,3 +57,103 @@ Backend:
 http://localhost:8080
 
 
+
+
+
+## Desarrollo local
+
+### 1. Base de datos
+
+Desde `infra`:
+
+```bash
+docker compose -f docker-compose.dev.yml up -d
+
+MySQL queda disponible en:
+
+Host: localhost
+Puerto: 3307
+2. Backend
+
+Abrir la carpeta backend en IntelliJ IDEA.
+
+Ejecutar:
+
+RutasDiaUtpApplication
+
+Backend:
+
+http://localhost:8080
+
+Health:
+
+http://localhost:8080/actuator/health
+3. Frontend
+
+Desde frontend:
+
+npm install
+npm run dev
+
+Frontend:
+
+http://localhost:5173
+Comunicación en tiempo real
+
+El proyecto utiliza:
+
+WebSocket
+STOMP
+
+Endpoint:
+
+/ws
+
+Prefijo cliente → servidor:
+
+/app
+
+Prefijo servidor → clientes:
+
+/topic
+Estructura
+RutasDiaUTP/
+├── backend/
+├── frontend/
+├── infra/
+└── docs/
+
+El backend y frontend son servicios independientes.
+
+Identidad visual
+
+La interfaz utiliza principalmente:
+
+rojo;
+negro;
+blanco.
+
+Los demás colores se reservan para representar estados operativos.
+
+Estado actual
+
+Bloque 0 completado:
+
+repositorio configurado;
+Spring Boot configurado;
+MySQL en Docker;
+Flyway configurado;
+React + Vite configurado;
+comunicación HTTP frontend/backend;
+comunicación WebSocket + STOMP;
+estructura modular inicial;
+Docker para frontend;
+Docker para backend.
+
+---
+
+# Commit 09 — cierre del Bloque 0
+
+```cmd
+git add README.md
+
