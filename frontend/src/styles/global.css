@@ -7,8 +7,17 @@
     "Segoe UI",
     sans-serif;
 
-  color: #202124;
-  background-color: #f5f6f8;
+  --utp-red: #d71920;
+  --utp-red-dark: #ab1117;
+
+  --utp-black: #181818;
+  --utp-dark: #2a2a2a;
+
+  --utp-white: #ffffff;
+
+  --background: #f5f5f5;
+  --border: #e4e4e4;
+  --text-secondary: #6b6b6b;
 }
 
 * {
@@ -17,9 +26,12 @@
 
 body {
   margin: 0;
+
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f5f6f8;
+
+  color: var(--utp-black);
+  background-color: var(--background);
 }
 
 button,
@@ -29,54 +41,128 @@ textarea {
   font: inherit;
 }
 
+
+/* ===============================
+   Layout principal
+   =============================== */
+
 .app-header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
+  background-color: var(--utp-white);
+
+  border-top: 4px solid var(--utp-red);
+  border-bottom: 1px solid var(--border);
 }
 
 .app-brand {
   font-size: 1.05rem;
-  font-weight: 600;
-  color: #202124;
+  font-weight: 700;
+
+  color: var(--utp-black);
 }
 
+
+/* ===============================
+   Tarjetas
+   =============================== */
+
 .content-card {
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
   padding: 24px;
+
+  background-color: var(--utp-white);
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
 }
+
+
+/* ===============================
+   Botones
+   =============================== */
+
+.btn-utp {
+  color: white;
+  background-color: var(--utp-red);
+
+  border-color: var(--utp-red);
+}
+
+.btn-utp:hover,
+.btn-utp:focus {
+  color: white;
+
+  background-color: var(--utp-red-dark);
+  border-color: var(--utp-red-dark);
+}
+
+.btn-utp:disabled {
+  color: white;
+
+  background-color: #c7c7c7;
+  border-color: #c7c7c7;
+}
+
+
+/* ===============================
+   Estados
+   =============================== */
 
 .status-badge {
   display: inline-flex;
   align-items: center;
+
   padding: 5px 10px;
+
   border-radius: 999px;
+
   font-size: 0.8rem;
   font-weight: 600;
 }
 
 .status-badge-success {
-  background-color: #e8f5e9;
   color: #1b5e20;
+  background-color: #e8f5e9;
 }
 
 .status-badge-warning {
-  background-color: #fff8e1;
-  color: #8a6100;
+  color: #7a5700;
+  background-color: #fff5d7;
 }
 
 .status-badge-danger {
-  background-color: #fdecec;
-  color: #a61b1b;
+  color: #9d1118;
+  background-color: #fde7e8;
 }
 
 .status-badge-info {
-  background-color: #e8f1fb;
   color: #245a8d;
+  background-color: #e8f1fb;
 }
 
 .status-badge-neutral {
-  background-color: #eeeeee;
   color: #555555;
+  background-color: #eeeeee;
+}
+
+
+/* ===============================
+   Sistema
+   =============================== */
+
+.system-row {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.realtime-response {
+  padding: 16px;
+
+  border-left: 4px solid var(--utp-red);
+
+  background-color: #fafafa;
+
+  border-radius: 4px;
 }
