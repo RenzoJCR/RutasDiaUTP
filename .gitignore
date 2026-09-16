@@ -65,3 +65,8 @@ mysql-data/
 *.tmp
 *.temp
 *.swp
+
+# =========================
+# Spring local configuration
+# =========================
+backend/src/main/resources/application-local.properties
