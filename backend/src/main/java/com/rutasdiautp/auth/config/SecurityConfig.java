@@ -9,12 +9,17 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.rutasdiautp.auth.filter.ActiveUserFilter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+
 @Configuration
 public class SecurityConfig {
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
+            ActiveUserFilter activeUserFilter,
             JwtAuthenticationConverter jwtAuthenticationConverter
     ) throws Exception {
 
@@ -44,6 +49,11 @@ public class SecurityConfig {
                                 "/api/auth/login"
                         ).permitAll()
 
+                        .requestMatchers(
+                                "/api/admin/**"
+                        )
+                        .hasRole("ADMINISTRADOR")
+
                         .anyRequest()
                         .authenticated()
                 )
@@ -54,6 +64,11 @@ public class SecurityConfig {
                                         jwtAuthenticationConverter
                                 )
                         )
+                )
+
+                .addFilterAfter(
+                        activeUserFilter,
+                        BearerTokenAuthenticationFilter.class
                 )
 
                 .formLogin(

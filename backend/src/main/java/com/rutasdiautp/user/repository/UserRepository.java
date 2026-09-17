@@ -14,7 +14,13 @@ public interface UserRepository
 
     boolean existsByEmailIgnoreCase(String email);
 
+    boolean existsByRole(UserRole role);
+
     List<User> findAllByRoleAndActiveTrueOrderByFirstNamesAscLastNamesAsc(
+            UserRole role
+    );
+
+    List<User> findAllByRoleOrderByFirstNamesAscLastNamesAsc(
             UserRole role
     );
 }
