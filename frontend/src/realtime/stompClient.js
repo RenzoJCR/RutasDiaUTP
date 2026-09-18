@@ -2,6 +2,10 @@ import { Client } from '@stomp/stompjs'
 
 import { WS_URL } from '../config/env'
 
+import {
+  getToken,
+} from '../modules/auth/storage/authStorage'
+
 function getBrokerUrl() {
 
   if (WS_URL) {
@@ -25,6 +29,11 @@ export function createStompClient({
   return new Client({
 
     brokerURL: getBrokerUrl(),
+
+    connectHeaders: {
+      Authorization:
+        `Bearer ${getToken() ?? ''}`,
+    },
 
     reconnectDelay: 3000,
 

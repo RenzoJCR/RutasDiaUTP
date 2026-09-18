@@ -1,6 +1,8 @@
 package com.rutasdiautp.realtime.config;
 
+import com.rutasdiautp.realtime.security.WebSocketJwtInterceptor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -8,20 +10,38 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketConfig
+        implements WebSocketMessageBrokerConfigurer {
 
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
+    private final WebSocketJwtInterceptor
+            webSocketJwtInterceptor;
 
-        // Mensajes que el servidor publica hacia los clientes.
-        registry.enableSimpleBroker("/topic");
-
-        // Mensajes que los clientes envían hacia Spring.
-        registry.setApplicationDestinationPrefixes("/app");
+    public WebSocketConfig(
+            WebSocketJwtInterceptor webSocketJwtInterceptor
+    ) {
+        this.webSocketJwtInterceptor =
+                webSocketJwtInterceptor;
     }
 
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void configureMessageBroker(
+            MessageBrokerRegistry registry
+    ) {
+
+        registry.enableSimpleBroker(
+                "/topic"
+        );
+
+        registry
+                .setApplicationDestinationPrefixes(
+                        "/app"
+                );
+    }
+
+    @Override
+    public void registerStompEndpoints(
+            StompEndpointRegistry registry
+    ) {
 
         registry
                 .addEndpoint("/ws")
@@ -29,5 +49,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         "http://localhost:*",
                         "http://127.0.0.1:*"
                 );
+    }
+
+    @Override
+    public void configureClientInboundChannel(
+            ChannelRegistration registration
+    ) {
+
+        registration.interceptors(
+                webSocketJwtInterceptor
+        );
     }
 }
