@@ -44,20 +44,33 @@ public class ActiveUserFilter
                     jwtAuth.getToken()
                             .getSubject();
 
-            boolean userIsActive =
+            Object tokenVersionClaim =
+                    jwtAuth.getToken()
+                            .getClaims()
+                            .get("tokenVersion");
+
+            long jwtTokenVersion =
+                    tokenVersionClaim instanceof Number number
+                            ? number.longValue()
+                            : -1;
+
+            User user =
                     userRepository
                             .findByEmailIgnoreCase(email)
-                            .map(User::isActive)
-                            .orElse(false);
+                            .orElse(null);
 
-            if (!userIsActive) {
+            boolean validUser =
+                    user != null
+                            && user.isActive()
+                            && user.getTokenVersion()
+                            == jwtTokenVersion;
 
-                SecurityContextHolder
-                        .clearContext();
+            if (!validUser) {
+
+                SecurityContextHolder.clearContext();
 
                 response.setStatus(
-                        HttpServletResponse
-                                .SC_UNAUTHORIZED
+                        HttpServletResponse.SC_UNAUTHORIZED
                 );
 
                 response.setContentType(
@@ -68,7 +81,7 @@ public class ActiveUserFilter
                         """
                         {
                           "message":
-                          "La cuenta está inactiva o ya no existe"
+                          "La sesión ya no es válida"
                         }
                         """
                 );

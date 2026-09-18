@@ -63,6 +63,11 @@ public class JwtService {
                                 user.getRole().name()
                         )
 
+                        .claim(
+                                "tokenVersion",
+                                user.getTokenVersion()
+                        )
+
                         .build();
 
         JwsHeader header =

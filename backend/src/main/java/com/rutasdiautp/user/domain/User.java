@@ -51,6 +51,12 @@ public class User {
     private boolean active;
 
     @Column(
+            name = "token_version",
+            nullable = false
+    )
+    private long tokenVersion;
+
+    @Column(
             name = "created_at",
             nullable = false
     )
@@ -78,6 +84,7 @@ public class User {
         this.passwordHash = passwordHash;
         this.role = role;
         this.active = true;
+        this.tokenVersion = 0;
     }
 
     @PrePersist
@@ -122,6 +129,10 @@ public class User {
         return role;
     }
 
+    public long getTokenVersion() {
+        return tokenVersion;
+    }
+
     public boolean isActive() {
         return active;
     }
@@ -146,6 +157,7 @@ public class User {
 
     public void changePassword(String newPasswordHash) {
         this.passwordHash = newPasswordHash;
+        this.tokenVersion++;
     }
 
     public void deactivate() {
