@@ -48,3 +48,33 @@ export async function createAdmin(
 
   return response.data
 }
+
+export async function updateAdmin(
+  adminId,
+  data,
+) {
+
+  const response =
+    await httpClient.put(
+      `/admin/users/admins/${adminId}`,
+      data,
+    )
+
+  return response.data
+}
+
+export async function updateAdminStatus(
+  adminId,
+  active,
+) {
+
+  const response =
+    await httpClient.patch(
+      `/admin/users/admins/${adminId}/status`,
+      {
+        active,
+      },
+    )
+
+  return response.data
+}

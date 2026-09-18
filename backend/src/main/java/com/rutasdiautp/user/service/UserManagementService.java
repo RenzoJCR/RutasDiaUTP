@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Locale;
 
+import com.rutasdiautp.user.dto.UpdateAdminRequest;
+
 @Service
 public class UserManagementService {
 
@@ -111,6 +113,122 @@ public class UserManagementService {
         }
 
         return UserResponse.from(user);
+    }
+
+    @Transactional
+    public UserResponse updateAdmin(
+            Long adminId,
+            UpdateAdminRequest request
+    ) {
+
+        User admin = userRepository
+                .findById(adminId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Administrador no encontrado"
+                        )
+                );
+
+        if (admin.getRole() != UserRole.ADMINISTRADOR) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El usuario seleccionado no es un administrador"
+            );
+        }
+
+        String email =
+                normalizeEmail(request.email());
+
+        userRepository
+                .findByEmailIgnoreCase(email)
+                .filter(existing ->
+                        !existing.getId().equals(adminId)
+                )
+                .ifPresent(existing -> {
+
+                    throw new ResponseStatusException(
+                            HttpStatus.CONFLICT,
+                            "Ya existe una cuenta registrada con ese correo"
+                    );
+                });
+
+        admin.updateProfile(
+                request.firstNames().trim(),
+                request.lastNames().trim(),
+                email
+        );
+
+        return UserResponse.from(admin);
+    }
+
+    @Transactional
+    public UserResponse updateAdminStatus(
+            Long adminId,
+            UpdateUserStatusRequest request,
+            String currentAdminEmail
+    ) {
+
+        User admin = userRepository
+                .findById(adminId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Administrador no encontrado"
+                        )
+                );
+
+        if (admin.getRole() != UserRole.ADMINISTRADOR) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "El usuario seleccionado no es un administrador"
+            );
+        }
+
+        boolean newStatus =
+                Boolean.TRUE.equals(
+                        request.active()
+                );
+
+        if (!newStatus && admin.isActive()) {
+
+            if (
+                    admin.getEmail()
+                            .equalsIgnoreCase(
+                                    currentAdminEmail
+                            )
+            ) {
+
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "No puedes inhabilitar tu propia cuenta"
+                );
+            }
+
+            long activeAdmins =
+                    userRepository
+                            .countByRoleAndActiveTrue(
+                                    UserRole.ADMINISTRADOR
+                            );
+
+            if (activeAdmins <= 1) {
+
+                throw new ResponseStatusException(
+                        HttpStatus.CONFLICT,
+                        "Debe existir al menos un administrador activo"
+                );
+            }
+
+            admin.deactivate();
+
+        } else if (newStatus) {
+
+            admin.activate();
+        }
+
+        return UserResponse.from(admin);
     }
 
     private String normalizeEmail(String email) {

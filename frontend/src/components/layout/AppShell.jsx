@@ -45,7 +45,7 @@ function AppShell() {
                   </Link>
 
                   <Link
-                    to="/admin/administradores/nuevo"
+                    to="/admin/administradores"
                     className="app-nav-link"
                   >
                     Administradores

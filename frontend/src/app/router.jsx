@@ -13,7 +13,7 @@ import LoginPage from '../modules/auth/pages/LoginPage'
 import RegisterPage from '../modules/auth/pages/RegisterPage'
 
 import MentorManagementPage from '../modules/admin/users/pages/MentorManagementPage'
-import CreateAdminPage from '../modules/admin/users/pages/CreateAdminPage'
+import AdminManagementPage from '../modules/admin/users/pages/AdminManagementPage'
 
 export const router =
   createBrowserRouter([
@@ -70,9 +70,9 @@ export const router =
                 },
 
                 {
-                  path: '/admin/administradores/nuevo',
+                  path: '/admin/administradores',
                   element: (
-                    <CreateAdminPage />
+                    <AdminManagementPage />
                   ),
                 },
 

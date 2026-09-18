@@ -23,4 +23,8 @@ public interface UserRepository
     List<User> findAllByRoleOrderByFirstNamesAscLastNamesAsc(
             UserRole role
     );
+
+    long countByRoleAndActiveTrue(
+            UserRole role
+    );
 }

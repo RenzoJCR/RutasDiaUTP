@@ -134,6 +134,16 @@ public class User {
         return updatedAt;
     }
 
+    public void updateProfile(
+            String firstNames,
+            String lastNames,
+            String email
+    ) {
+        this.firstNames = firstNames;
+        this.lastNames = lastNames;
+        this.email = email;
+    }
+
     public void changePassword(String newPasswordHash) {
         this.passwordHash = newPasswordHash;
     }
