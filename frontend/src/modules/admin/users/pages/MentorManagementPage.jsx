@@ -22,35 +22,43 @@ function MentorManagementPage() {
   const [error, setError] =
     useState('')
 
-  const loadMentors =
-    async () => {
+  useEffect(() => {
 
-      try {
+    let active = true
 
-        setError('')
+    getMentors()
+      .then((data) => {
 
-        const data =
-          await getMentors()
+        if (active) {
+          setMentors(data)
+        }
 
-        setMentors(data)
+      })
+      .catch((requestError) => {
 
-      } catch (requestError) {
+        if (active) {
 
-        setError(
-          getApiErrorMessage(
-            requestError,
-            'No se pudieron cargar los mentores.',
-          ),
-        )
+          setError(
+            getApiErrorMessage(
+              requestError,
+              'No se pudieron cargar los mentores.',
+            ),
+          )
+        }
 
-      } finally {
+      })
+      .finally(() => {
 
-        setLoading(false)
-      }
+        if (active) {
+          setLoading(false)
+        }
+
+      })
+
+    return () => {
+      active = false
     }
 
-  useEffect(() => {
-    loadMentors()
   }, [])
 
   const changeStatus =
@@ -75,6 +83,8 @@ function MentorManagementPage() {
 
       try {
 
+        setError('')
+
         const updatedMentor =
           await updateMentorStatus(
             mentor.id,
@@ -85,8 +95,7 @@ function MentorManagementPage() {
           (current) =>
             current.map(
               (item) =>
-                item.id
-                  === updatedMentor.id
+                item.id === updatedMentor.id
                   ? updatedMentor
                   : item,
             ),
@@ -183,13 +192,11 @@ function MentorManagementPage() {
                               : 'neutral'
                           }
                         >
-
                           {
                             mentor.active
                               ? 'Activo'
                               : 'Inactivo'
                           }
-
                         </StatusBadge>
 
                       </td>
@@ -204,18 +211,14 @@ function MentorManagementPage() {
                               : 'btn btn-sm btn-outline-dark'
                           }
                           onClick={() =>
-                            changeStatus(
-                              mentor,
-                            )
+                            changeStatus(mentor)
                           }
                         >
-
                           {
                             mentor.active
                               ? 'Inhabilitar'
                               : 'Reactivar'
                           }
-
                         </button>
 
                       </td>

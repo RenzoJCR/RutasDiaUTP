@@ -3,7 +3,7 @@ import {
   Outlet,
 } from 'react-router-dom'
 
-import { useAuth } from '../../modules/auth/context/AuthContext'
+import { useAuth } from '../../modules/auth/hooks/useAuth'
 
 function AppShell() {
 

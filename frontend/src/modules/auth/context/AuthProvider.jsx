@@ -1,6 +1,4 @@
 import {
-  createContext,
-  useContext,
   useEffect,
   useState,
 } from 'react'
@@ -21,10 +19,9 @@ import {
   AUTH_EXPIRED_EVENT,
 } from '../authEvents'
 
-const AuthContext =
-  createContext(null)
+import { AuthContext } from './AuthContext'
 
-export function AuthProvider({
+function AuthProvider({
   children,
 }) {
 
@@ -32,38 +29,46 @@ export function AuthProvider({
     useState(null)
 
   const [loading, setLoading] =
-    useState(true)
+    useState(() => Boolean(getToken()))
 
   useEffect(() => {
 
-    const loadSession = async () => {
+    const token = getToken()
 
-      const token = getToken()
-
-      if (!token) {
-        setLoading(false)
-        return
-      }
-
-      try {
-
-        const currentUser =
-          await getCurrentUser()
-
-        setUser(currentUser)
-
-      } catch {
-
-        removeToken()
-        setUser(null)
-
-      } finally {
-
-        setLoading(false)
-      }
+    if (!token) {
+      return undefined
     }
 
-    loadSession()
+    let active = true
+
+    getCurrentUser()
+      .then((currentUser) => {
+
+        if (active) {
+          setUser(currentUser)
+        }
+
+      })
+      .catch(() => {
+
+        removeToken()
+
+        if (active) {
+          setUser(null)
+        }
+
+      })
+      .finally(() => {
+
+        if (active) {
+          setLoading(false)
+        }
+
+      })
+
+    return () => {
+      active = false
+    }
 
   }, [])
 
@@ -106,9 +111,22 @@ export function AuthProvider({
     return response.user
   }
 
-  const register = async (data) => {
-    return registerMentor(data)
-  }
+  const register =
+    async (data) => {
+
+      return registerMentor(data)
+    }
+
+  const refreshUser =
+    async () => {
+
+      const currentUser =
+        await getCurrentUser()
+
+      setUser(currentUser)
+
+      return currentUser
+    }
 
   const logout = () => {
 
@@ -122,6 +140,7 @@ export function AuthProvider({
     login,
     register,
     logout,
+    refreshUser,
     isAuthenticated: Boolean(user),
   }
 
@@ -134,16 +153,4 @@ export function AuthProvider({
   )
 }
 
-export function useAuth() {
-
-  const context =
-    useContext(AuthContext)
-
-  if (!context) {
-    throw new Error(
-      'useAuth debe utilizarse dentro de AuthProvider',
-    )
-  }
-
-  return context
-}
+export default AuthProvider
