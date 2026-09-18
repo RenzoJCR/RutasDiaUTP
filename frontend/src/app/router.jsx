@@ -12,6 +12,9 @@ import AuthLayout from '../modules/auth/components/AuthLayout'
 import LoginPage from '../modules/auth/pages/LoginPage'
 import RegisterPage from '../modules/auth/pages/RegisterPage'
 
+import MentorManagementPage from '../modules/admin/users/pages/MentorManagementPage'
+import CreateAdminPage from '../modules/admin/users/pages/CreateAdminPage'
+
 export const router =
   createBrowserRouter([
 
@@ -59,8 +62,19 @@ export const router =
 
               children: [
 
-                // En B1.6 ponemos aquí
-                // las rutas administrativas.
+                {
+                  path: '/admin/mentores',
+                  element: (
+                    <MentorManagementPage />
+                  ),
+                },
+
+                {
+                  path: '/admin/administradores/nuevo',
+                  element: (
+                    <CreateAdminPage />
+                  ),
+                },
 
               ],
             },
