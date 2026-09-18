@@ -157,3 +157,56 @@ Docker para backend.
 ```cmd
 git add README.md
 
+
+
+## Bloque 1 - Usuarios y seguridad
+
+El sistema implementa autenticación y autorización basada en JWT.
+
+### Roles
+
+- ADMINISTRADOR
+- MENTOR
+
+### Mentor
+
+El mentor puede:
+
+- registrarse con correo institucional `@utp.edu.pe`;
+- iniciar sesión;
+- cerrar sesión;
+- cambiar su contraseña;
+- recuperar su contraseña;
+- acceder únicamente a funcionalidades autorizadas para su rol.
+
+### Administrador
+
+El administrador puede:
+
+- iniciar sesión;
+- cambiar y recuperar su contraseña;
+- consultar mentores;
+- inhabilitar y reactivar mentores;
+- consultar administradores;
+- crear administradores;
+- editar administradores;
+- inhabilitar y reactivar administradores.
+
+Los usuarios no se eliminan físicamente para conservar
+el historial relacionado con eventos y operaciones.
+
+### Contraseñas
+
+Las contraseñas se almacenan mediante `PasswordEncoder`
+con BCrypt.
+
+Al cambiar o restablecer una contraseña se incrementa
+la versión de seguridad del usuario, invalidando JWT
+emitidos anteriormente.
+
+### Recuperación de contraseña
+
+En desarrollo:
+
+```text
+app.mail.enabled=false
