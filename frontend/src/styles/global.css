@@ -166,3 +166,77 @@ textarea {
 
   border-radius: 4px;
 }
+
+/* ===============================
+   Autenticación
+   =============================== */
+
+.auth-layout {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5f5f5 0%,
+      #eeeeee 100%
+    );
+}
+
+.auth-panel {
+  width: 100%;
+  max-width: 430px;
+
+  padding: 32px;
+
+  background-color: #ffffff;
+
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--utp-red);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 8px 30px
+    rgba(0, 0, 0, 0.06);
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 32px;
+}
+
+.auth-brand-mark {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  background-color: var(--utp-red);
+
+  font-weight: 800;
+
+  border-radius: 8px;
+}
+
+.page-loading {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #666666;
+}
