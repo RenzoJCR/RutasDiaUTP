@@ -1,132 +1,91 @@
-import { useState } from 'react'
-import {
-  Link,
-  Navigate,
-  useNavigate,
-} from 'react-router-dom'
+import { useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from '../hooks/useAuth'
-import { getApiErrorMessage } from '../../../services/apiError'
+import { useAuth } from "../hooks/useAuth";
+import { getApiErrorMessage } from "../../../services/apiError";
 
 function LoginPage() {
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const { user, login } = useAuth();
 
-  const {
-    user,
-    login,
-  } = useAuth()
+  const [email, setEmail] = useState("");
 
-  const [email, setEmail] =
-    useState('')
+  const [password, setPassword] = useState("");
 
-  const [password, setPassword] =
-    useState('')
+  const [error, setError] = useState("");
 
-  const [error, setError] =
-    useState('')
+  const [submitting, setSubmitting] = useState(false);
 
-  const [submitting, setSubmitting] =
-    useState(false)
+  const location = useLocation();
 
   if (user) {
-
-    return (
-      <Navigate
-        to="/"
-        replace
-      />
-    )
+    return <Navigate to="/" replace />;
   }
 
-  const handleSubmit =
-    async (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-      event.preventDefault()
+    setError("");
+    setSubmitting(true);
 
-      setError('')
-      setSubmitting(true)
+    try {
+      const loggedUser = await login(email, password);
 
-      try {
-
-        const loggedUser =
-          await login(
-            email,
-            password,
-          )
-
-        if (
-          loggedUser.role
-          === 'ADMINISTRADOR'
-        ) {
-
-          navigate(
-            '/admin/mentores',
-            {
-              replace: true,
-            },
-          )
-
-        } else {
-
-          navigate(
-            '/',
-            {
-              replace: true,
-            },
-          )
-        }
-
-      } catch (requestError) {
-
-        setError(
-          getApiErrorMessage(
-            requestError,
-            'Correo o contraseña incorrectos',
-          ),
-        )
-
-      } finally {
-
-        setSubmitting(false)
+      if (loggedUser.role === "ADMINISTRADOR") {
+        navigate("/admin/mentores", {
+          replace: true,
+        });
+      } else {
+        navigate("/", {
+          replace: true,
+        });
       }
+    } catch (requestError) {
+      setError(
+        getApiErrorMessage(requestError, "Correo o contraseña incorrectos"),
+      );
+    } finally {
+      setSubmitting(false);
     }
+  };
 
   return (
     <>
       <div className="mb-4">
+        <h1 className="h4 mb-2">Iniciar sesión</h1>
 
-        <h1 className="h4 mb-2">
-          Iniciar sesión
-        </h1>
-
-        <p className="text-secondary mb-0">
-          Ingresa con tu cuenta de Día UTP.
-        </p>
-
+        <p className="text-secondary mb-0">Ingresa con tu cuenta de Día UTP.</p>
       </div>
 
       {error && (
-
-        <div
-          className="alert alert-danger"
-          role="alert"
-        >
+        <div className="alert alert-danger" role="alert">
           {error}
         </div>
-
       )}
 
-      <form
-        onSubmit={handleSubmit}
-      >
+      {location.state?.registered && (
+        <div className="alert alert-success">
+          Tu cuenta fue creada correctamente. Ya puedes iniciar sesión.
+        </div>
+      )}
 
+      {location.state?.passwordChanged && (
+        <div className="alert alert-success">
+          Tu contraseña fue cambiada correctamente. Inicia sesión nuevamente.
+        </div>
+      )}
+
+      {location.state?.passwordReset && (
+        <div className="alert alert-success">
+          Tu contraseña fue restablecida correctamente. Ya puedes iniciar
+          sesión.
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
-
-          <label
-            className="form-label"
-            htmlFor="email"
-          >
+          <label className="form-label" htmlFor="email">
             Correo institucional
           </label>
 
@@ -136,23 +95,14 @@ function LoginPage() {
             className="form-control"
             placeholder="codigo@utp.edu.pe"
             value={email}
-            onChange={(event) =>
-              setEmail(
-                event.target.value,
-              )
-            }
+            onChange={(event) => setEmail(event.target.value)}
             required
             autoComplete="email"
           />
-
         </div>
 
         <div className="mb-3">
-
-          <label
-            className="form-label"
-            htmlFor="password"
-          >
+          <label className="form-label" htmlFor="password">
             Contraseña
           </label>
 
@@ -161,47 +111,31 @@ function LoginPage() {
             type="password"
             className="form-control"
             value={password}
-            onChange={(event) =>
-              setPassword(
-                event.target.value,
-              )
-            }
+            onChange={(event) => setPassword(event.target.value)}
             required
             autoComplete="current-password"
           />
+        </div>
 
+        <div className="text-end mb-3">
+          <Link to="/olvide-contrasena" className="small">
+            ¿Olvidaste tu contraseña?
+          </Link>
         </div>
 
         <div className="d-grid mb-3">
-
-          <button
-            className="btn btn-utp"
-            type="submit"
-            disabled={submitting}
-          >
-            {
-              submitting
-                ? 'Ingresando...'
-                : 'Ingresar'
-            }
+          <button className="btn btn-utp" type="submit" disabled={submitting}>
+            {submitting ? "Ingresando..." : "Ingresar"}
           </button>
-
         </div>
-
       </form>
 
       <div className="text-center small">
-
-        ¿Aún no tienes una cuenta?{' '}
-
-        <Link to="/registro">
-          Registrarme como mentor
-        </Link>
-
+        ¿Aún no tienes una cuenta?{" "}
+        <Link to="/registro">Registrarme como mentor</Link>
       </div>
-
     </>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;

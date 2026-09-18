@@ -37,3 +37,52 @@ export async function getCurrentUser() {
 
   return response.data
 }
+
+export async function changePassword(
+  currentPassword,
+  newPassword,
+) {
+
+  const response =
+    await httpClient.post(
+      '/auth/password/change',
+      {
+        currentPassword,
+        newPassword,
+      },
+    )
+
+  return response.data
+}
+
+export async function forgotPassword(
+  email,
+) {
+
+  const response =
+    await httpClient.post(
+      '/auth/password/forgot',
+      {
+        email,
+      },
+    )
+
+  return response.data
+}
+
+export async function resetPassword(
+  token,
+  newPassword,
+) {
+
+  const response =
+    await httpClient.post(
+      '/auth/password/reset',
+      {
+        token,
+        newPassword,
+      },
+    )
+
+  return response.data
+}
